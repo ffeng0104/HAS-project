@@ -1,0 +1,74 @@
+class Library
+{
+  1 -> * Artist;
+  1 -> * Song;
+  1 -> * Playlist;
+  1 -> * Album;
+  
+}
+class Album
+{
+  1 -- * Location;
+  albumGenre;
+  Date releaseDate;
+  nameAlbum;
+  
+}
+class Song
+{
+  1 -- * Location;
+  * -- * Album;
+  * -- * Playlist;
+  songTitle;
+  Time songDuration;
+  int songPositionAlbum;
+  
+}
+class Artist
+{
+  artistName;
+  * -- * Song;
+  
+  
+}
+class Playlist
+{
+  1 -- * Location;
+  playlistName;
+}
+class Location
+{
+  locationName;
+  float volume;
+  boolean mute;
+}//$?[End_of_model]$?
+
+class Library
+{
+  position 50 30 109 45;
+}
+
+class Album
+{
+  position 50 130 109 45;
+}
+
+class Song
+{
+  position 50 230 109 45;
+}
+
+class Artist
+{
+  position 50 330 109 45;
+}
+
+class Playlist
+{
+  position 50 430 109 45;
+}
+
+class Location
+{
+  position 250 30 109 45;
+}

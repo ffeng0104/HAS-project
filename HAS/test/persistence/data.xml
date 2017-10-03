@@ -1,0 +1,13 @@
+<library id="1">
+  <artists id="2"/>
+  <songs id="3"/>
+  <playlists id="4"/>
+  <albums id="5">
+    <album id="6">
+      <albumGenre>Jazz</albumGenre>
+      <nameAlbum>AAA</nameAlbum>
+      <locations id="7"/>
+      <songs id="8"/>
+    </album>
+  </albums>
+</library>
