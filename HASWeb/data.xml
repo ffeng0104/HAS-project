@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<HASWEB>
+
+<song><name></name></song> 
+
+<playlist><name></name> <playlistsong></playlistsong></playlist> 
+
+<album><name></name> <genre></genre> <date></date> <artist></artist> <albumsong></albumsong></album>
+
+<location><name></name> <volume></volume></location>
+
+</HASWEB>

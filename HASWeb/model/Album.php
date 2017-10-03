@@ -1,0 +1,336 @@
+<?php
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.23.0-f5592a4 modeling language!*/
+
+class Album
+{
+
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
+
+  //Album Attributes
+  private $albumGenre;
+  private $releaseDate;
+  private $nameAlbum;
+
+  //Album Associations
+  private $locations;
+  private $songs;
+
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public function __construct($aAlbumGenre, $aReleaseDate, $aNameAlbum)
+  {
+    $this->albumGenre = $aAlbumGenre;
+    $this->releaseDate = $aReleaseDate;
+    $this->nameAlbum = $aNameAlbum;
+    $this->locations = array();
+    $this->songs = array();
+  }
+
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public function setAlbumGenre($aAlbumGenre)
+  {
+    $wasSet = false;
+    $this->albumGenre = $aAlbumGenre;
+    $wasSet = true;
+    return $wasSet;
+  }
+
+  public function setReleaseDate($aReleaseDate)
+  {
+    $wasSet = false;
+    $this->releaseDate = $aReleaseDate;
+    $wasSet = true;
+    return $wasSet;
+  }
+
+  public function setNameAlbum($aNameAlbum)
+  {
+    $wasSet = false;
+    $this->nameAlbum = $aNameAlbum;
+    $wasSet = true;
+    return $wasSet;
+  }
+
+  public function getAlbumGenre()
+  {
+    return $this->albumGenre;
+  }
+
+  public function getReleaseDate()
+  {
+    return $this->releaseDate;
+  }
+
+  public function getNameAlbum()
+  {
+    return $this->nameAlbum;
+  }
+
+  public function getLocation_index($index)
+  {
+    $aLocation = $this->locations[$index];
+    return $aLocation;
+  }
+
+  public function getLocations()
+  {
+    $newLocations = $this->locations;
+    return $newLocations;
+  }
+
+  public function numberOfLocations()
+  {
+    $number = count($this->locations);
+    return $number;
+  }
+
+  public function hasLocations()
+  {
+    $has = $this->numberOfLocations() > 0;
+    return $has;
+  }
+
+  public function indexOfLocation($aLocation)
+  {
+    $wasFound = false;
+    $index = 0;
+    foreach($this->locations as $location)
+    {
+      if ($location->equals($aLocation))
+      {
+        $wasFound = true;
+        break;
+      }
+      $index += 1;
+    }
+    $index = $wasFound ? $index : -1;
+    return $index;
+  }
+
+  public function getSong_index($index)
+  {
+    $aSong = $this->songs[$index];
+    return $aSong;
+  }
+
+  public function getSongs()
+  {
+    $newSongs = $this->songs;
+    return $newSongs;
+  }
+
+  public function numberOfSongs()
+  {
+    $number = count($this->songs);
+    return $number;
+  }
+
+  public function hasSongs()
+  {
+    $has = $this->numberOfSongs() > 0;
+    return $has;
+  }
+
+  public function indexOfSong($aSong)
+  {
+    $wasFound = false;
+    $index = 0;
+    foreach($this->songs as $song)
+    {
+      if ($song->equals($aSong))
+      {
+        $wasFound = true;
+        break;
+      }
+      $index += 1;
+    }
+    $index = $wasFound ? $index : -1;
+    return $index;
+  }
+
+  public static function minimumNumberOfLocations()
+  {
+    return 0;
+  }
+
+  public function addLocationVia($aLocationName, $aVolume, $aMute, $aSong, $aPlaylist)
+  {
+    return new Location($aLocationName, $aVolume, $aMute, $this, $aSong, $aPlaylist);
+  }
+
+  public function addLocation($aLocation)
+  {
+    $wasAdded = false;
+    if ($this->indexOfLocation($aLocation) !== -1) { return false; }
+    $existingAlbum = $aLocation->getAlbum();
+    $isNewAlbum = $existingAlbum != null && $this !== $existingAlbum;
+    if ($isNewAlbum)
+    {
+      $aLocation->setAlbum($this);
+    }
+    else
+    {
+      $this->locations[] = $aLocation;
+    }
+    $wasAdded = true;
+    return $wasAdded;
+  }
+
+  public function removeLocation($aLocation)
+  {
+    $wasRemoved = false;
+    //Unable to remove aLocation, as it must always have a album
+    if ($this !== $aLocation->getAlbum())
+    {
+      unset($this->locations[$this->indexOfLocation($aLocation)]);
+      $this->locations = array_values($this->locations);
+      $wasRemoved = true;
+    }
+    return $wasRemoved;
+  }
+
+  public function addLocationAt($aLocation, $index)
+  {  
+    $wasAdded = false;
+    if($this->addLocation($aLocation))
+    {
+      if($index < 0 ) { $index = 0; }
+      if($index > $this->numberOfLocations()) { $index = $this->numberOfLocations() - 1; }
+      array_splice($this->locations, $this->indexOfLocation($aLocation), 1);
+      array_splice($this->locations, $index, 0, array($aLocation));
+      $wasAdded = true;
+    }
+    return $wasAdded;
+  }
+
+  public function addOrMoveLocationAt($aLocation, $index)
+  {
+    $wasAdded = false;
+    if($this->indexOfLocation($aLocation) !== -1)
+    {
+      if($index < 0 ) { $index = 0; }
+      if($index > $this->numberOfLocations()) { $index = $this->numberOfLocations() - 1; }
+      array_splice($this->locations, $this->indexOfLocation($aLocation), 1);
+      array_splice($this->locations, $index, 0, array($aLocation));
+      $wasAdded = true;
+    } 
+    else 
+    {
+      $wasAdded = $this->addLocationAt($aLocation, $index);
+    }
+    return $wasAdded;
+  }
+
+  public static function minimumNumberOfSongs()
+  {
+    return 0;
+  }
+
+  public function addSong($aSong)
+  {
+    $wasAdded = false;
+    if ($this->indexOfSong($aSong) !== -1) { return false; }
+    $this->songs[] = $aSong;
+    if ($aSong->indexOfAlbum($this) != -1)
+    {
+      $wasAdded = true;
+    }
+    else
+    {
+      $wasAdded = $aSong->addAlbum($this);
+      if (!$wasAdded)
+      {
+        array_pop($this->songs);
+      }
+    }
+    return $wasAdded;
+  }
+
+  public function removeSong($aSong)
+  {
+    $wasRemoved = false;
+    if ($this->indexOfSong($aSong) == -1)
+    {
+      return $wasRemoved;
+    }
+
+    $oldIndex = $this->indexOfSong($aSong);
+    unset($this->songs[$oldIndex]);
+    if ($aSong->indexOfAlbum($this) == -1)
+    {
+      $wasRemoved = true;
+    }
+    else
+    {
+      $wasRemoved = $aSong->removeAlbum($this);
+      if (!$wasRemoved)
+      {
+        $this->songs[$oldIndex] = $aSong;
+        ksort($this->songs);
+      }
+    }
+    $this->songs = array_values($this->songs);
+    return $wasRemoved;
+  }
+
+  public function addSongAt($aSong, $index)
+  {  
+    $wasAdded = false;
+    if($this->addSong($aSong))
+    {
+      if($index < 0 ) { $index = 0; }
+      if($index > $this->numberOfSongs()) { $index = $this->numberOfSongs() - 1; }
+      array_splice($this->songs, $this->indexOfSong($aSong), 1);
+      array_splice($this->songs, $index, 0, array($aSong));
+      $wasAdded = true;
+    }
+    return $wasAdded;
+  }
+
+  public function addOrMoveSongAt($aSong, $index)
+  {
+    $wasAdded = false;
+    if($this->indexOfSong($aSong) !== -1)
+    {
+      if($index < 0 ) { $index = 0; }
+      if($index > $this->numberOfSongs()) { $index = $this->numberOfSongs() - 1; }
+      array_splice($this->songs, $this->indexOfSong($aSong), 1);
+      array_splice($this->songs, $index, 0, array($aSong));
+      $wasAdded = true;
+    } 
+    else 
+    {
+      $wasAdded = $this->addSongAt($aSong, $index);
+    }
+    return $wasAdded;
+  }
+
+  public function equals($compareTo)
+  {
+    return $this == $compareTo;
+  }
+
+  public function delete()
+  {
+    foreach ($this->locations as $aLocation)
+    {
+      $aLocation->delete();
+    }
+    $copyOfSongs = $this->songs;
+    $this->songs = array();
+    foreach ($copyOfSongs as $aSong)
+    {
+      $aSong->removeAlbum($this);
+    }
+  }
+
+}
+?>
